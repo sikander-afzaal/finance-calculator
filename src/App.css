@@ -1,0 +1,186 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block: 20px;
+}
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 40px;
+  width: 90%;
+  max-width: 600px;
+}
+.app h1 {
+  font-size: 25px;
+  font-weight: bolder;
+}
+.calculator {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: stretch;
+  width: 100%;
+}
+.formCol {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 20px;
+}
+.colRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 30px;
+}
+.colRow input {
+  max-width: 65px;
+  height: 35px;
+  border: none;
+  outline: none;
+  padding-inline: 5px;
+}
+.colRow label {
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  text-align: center;
+}
+.flex-div {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+.colRow .col-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.colRow p {
+  font-size: 14px;
+  line-height: 1;
+}
+.formCol button {
+  margin-top: auto;
+  align-self: center;
+  background-color: var(--red);
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 150px;
+  height: 50px;
+  border: none;
+}
+.inputCol {
+  flex-direction: column;
+  gap: 20px;
+}
+.result-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  margin-top: 20px;
+}
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  padding-inline: 10px;
+}
+.results {
+  background-color: white;
+  height: 50px;
+  align-items: center;
+}
+.info-ico {
+  width: 20px;
+  object-fit: contain;
+  cursor: pointer;
+}
+.info-text {
+  position: absolute;
+  z-index: 20;
+  background-color: white;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 5px;
+  font-weight: 300;
+  bottom: 120%;
+  right: 0;
+  display: none;
+  cursor: pointer;
+  width: 180px;
+}
+.info-ico:hover ~ .info-text {
+  display: block;
+}
+.colRow select {
+  width: 50%;
+  height: 35px;
+  border: none;
+}
+@media screen and (max-width: 600px) {
+  .colRow label {
+    font-size: 16px;
+  }
+  .app h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+  .result-grid h3 {
+    font-size: 16px;
+  }
+  .info-text {
+    left: 0;
+    right: initial;
+  }
+  .calculator {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .inputCol {
+    flex-direction: row;
+    width: 100%;
+  }
+  .formCol {
+    width: 100%;
+  }
+  .colRow {
+    align-items: flex-start;
+  }
+  .col-div {
+    max-width: max-content;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+  .flex-div {
+    gap: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+  }
+  .colRow select {
+    max-width: 130px;
+    width: max-content;
+  }
+}
