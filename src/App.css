@@ -173,6 +173,7 @@
 @media screen and (max-width: 665px) {
   .colRow label {
     font-size: 16px;
+    text-align: left;
   }
   .app h1 {
     font-size: 20px;
@@ -182,7 +183,8 @@
     font-size: 16px;
   }
   .info-text {
-    left: 0;
+    left: 100%;
+    transform: translateX(-50%);
     right: initial;
   }
   .calculator {

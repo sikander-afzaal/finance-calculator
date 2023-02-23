@@ -11,6 +11,7 @@ const App = () => {
     holdingCost: "",
     dispo: "",
     marketRent: "",
+    optionDeposit: "",
   });
   const [monthlyExpense, setMonthlyExpense] = useState({
     PITI: 0,
@@ -50,6 +51,7 @@ const App = () => {
       renovations,
       holdingCost,
       dispo,
+      optionDeposit,
     } = formData;
     const totalMonthly =
       monthlyExpense["Capital Expenditure"] +
@@ -70,7 +72,9 @@ const App = () => {
     const yearlyIncomeVal = marketRent * 12 - totalMonthly * 12;
     setAcqusitionCost(parseFloat(accCost).toFixed(2));
     setYearlyIncome(parseFloat(yearlyIncomeVal).toFixed(2));
-    setCashReturn(parseFloat(yearlyIncomeVal / accCost).toFixed(2));
+    setCashReturn(
+      parseFloat((yearlyIncomeVal + optionDeposit) / accCost).toFixed(2)
+    );
   };
 
   return (
@@ -194,6 +198,14 @@ const App = () => {
                 })}
               </div>
             </div>
+            <InputComp
+              handler={inputHandler}
+              value={formData.optionDeposit}
+              name="optionDeposit"
+              col
+              info="With the rent to own model, you receive a non refundable option deposit typically 5-10 percent of the purchase price. Insert that amount into the following box to see what your cash on cash return would be using the rent to own strategy."
+              label="Non Refundable Option Deposit"
+            />
             <button type="submit" className="calculate">
               Calculate
             </button>
