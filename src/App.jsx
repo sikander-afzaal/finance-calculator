@@ -11,17 +11,31 @@ const App = () => {
     holdingCost: "",
     dispo: "",
     marketRent: "",
-    totalPiti: "",
+  });
+  const [monthlyExpense, setMonthlyExpense] = useState({
+    PITI: 0,
+    Taxes: 0,
+    Insurance: 0,
+    HOA: 0,
+    "Property Management": 0,
+    "Capital Expenditure": 0,
+    Other: 0,
   });
   const [acqusitionCost, setAcqusitionCost] = useState("");
   const [yearlyIncome, setYearlyIncome] = useState("");
   const [cashReturn, setCashReturn] = useState("");
-  const [dropDownVal, setDropDownVal] = useState("PITI");
+  const [dropDown, setDropDown] = useState(false);
 
   const inputHandler = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => {
-      return { ...prev, [name]: value };
+      return { ...prev, [name]: parseFloat(value) };
+    });
+  };
+  const inputHandlerExpense = (e) => {
+    const { name, value } = e.target;
+    setMonthlyExpense((prev) => {
+      return { ...prev, [name]: parseFloat(value) };
     });
   };
 
@@ -36,26 +50,24 @@ const App = () => {
       renovations,
       holdingCost,
       dispo,
-      totalPiti,
     } = formData;
-    const cashToSellerFloat = parseFloat(cashToSeller);
-    const backPaymentsFloat = parseFloat(backPayments);
-    const marketRentFloat = parseFloat(marketRent);
-    const marketingFloat = parseFloat(marketing);
-    const closingCostFloat = parseFloat(closingCost);
-    const renovationsFloat = parseFloat(renovations);
-    const holdingCostFloat = parseFloat(holdingCost);
-    const dispoFloat = parseFloat(dispo);
-    const totalPitiFloat = parseFloat(totalPiti);
+    const totalMonthly =
+      monthlyExpense["Capital Expenditure"] +
+      monthlyExpense.HOA +
+      monthlyExpense.Insurance +
+      monthlyExpense.Other +
+      monthlyExpense.PITI +
+      monthlyExpense["Property Management"] +
+      monthlyExpense.Taxes;
     const accCost =
-      cashToSellerFloat +
-      backPaymentsFloat +
-      marketingFloat +
-      closingCostFloat +
-      renovationsFloat +
-      holdingCostFloat +
-      dispoFloat;
-    const yearlyIncomeVal = marketRentFloat * 12 - totalPitiFloat * 12;
+      cashToSeller +
+      backPayments +
+      marketing +
+      closingCost +
+      renovations +
+      holdingCost +
+      dispo;
+    const yearlyIncomeVal = marketRent * 12 - totalMonthly * 12;
     setAcqusitionCost(parseFloat(accCost).toFixed(2));
     setYearlyIncome(parseFloat(yearlyIncomeVal).toFixed(2));
     setCashReturn(parseFloat(yearlyIncomeVal / accCost).toFixed(2));
@@ -72,12 +84,14 @@ const App = () => {
               value={formData.cashToSeller}
               name="cashToSeller"
               label="Cash To Seller"
+              requiredInput
             />
             <InputComp
               handler={inputHandler}
               value={formData.backPayments}
               name="backPayments"
               label="Back Payments/Liens"
+              requiredInput
             />
             <InputComp
               handler={inputHandler}
@@ -85,17 +99,20 @@ const App = () => {
               name="marketing"
               info="va lists/ Skip trace, text blast, referral, realtor, commission, acquisition commissions, sponsored ads,mailings"
               label="Cost of Marketing"
+              requiredInput
             />
             <InputComp
               handler={inputHandler}
               value={formData.closingCost}
               name="closingCost"
               label="Closing Cost"
+              requiredInput
             />
             <InputComp
               handler={inputHandler}
               value={formData.renovations}
               name="renovations"
+              requiredInput
               label="Renovations"
             />
             <InputComp
@@ -103,6 +120,7 @@ const App = () => {
               value={formData.holdingCost}
               name="holdingCost"
               label="Holding Cost"
+              requiredInput
               info="lawn/snow/maintainance, monthly payment, utilities, insurance"
             />
             <InputComp
@@ -110,6 +128,7 @@ const App = () => {
               value={formData.dispo}
               name="dispo"
               label="Cost of Dispo"
+              requiredInput
             />
           </div>
           <div className="formCol">
@@ -118,26 +137,63 @@ const App = () => {
               value={formData.marketRent}
               name="marketRent"
               col
+              requiredInput
               label="Marketing Rent"
             />
-            <InputComp
-              handler={inputHandler}
-              value={formData.totalPiti}
-              name="totalPiti"
-              label="Total Monthly Expenses"
-              dropItems={[
-                "PITI",
-                "Taxes",
-                "Insurance",
-                "HOA",
-                "Capital Expenditure",
-                "Property Management",
-                "Other",
-              ]}
-              dropDownVal={dropDownVal}
-              setDropDownVal={setDropDownVal}
-              col
-            />
+            <div className="accordian-div">
+              <button
+                type="button"
+                onClick={() => setDropDown((prev) => !prev)}
+              >
+                <h3>
+                  Total Monthly Expenses = $
+                  {monthlyExpense["Capital Expenditure"] +
+                    monthlyExpense.HOA +
+                    monthlyExpense.Insurance +
+                    monthlyExpense.Other +
+                    monthlyExpense.PITI +
+                    monthlyExpense["Property Management"] +
+                    monthlyExpense.Taxes}{" "}
+                </h3>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  style={{
+                    transform: dropDown ? "rotate(180deg)" : "rotate(0)",
+                  }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </button>
+              <div className={`acord-bottom ${dropDown ? "open-acord" : ""}`}>
+                {[
+                  "PITI",
+                  "Taxes",
+                  "Insurance",
+                  "HOA",
+                  "Capital Expenditure",
+                  "Property Management",
+                  "Other",
+                ].map((elem) => {
+                  return (
+                    <InputComp
+                      key={elem}
+                      handler={inputHandlerExpense}
+                      value={monthlyExpense[elem]}
+                      name={elem}
+                      label={elem}
+                    />
+                  );
+                })}
+              </div>
+            </div>
             <button type="submit" className="calculate">
               Calculate
             </button>
@@ -176,9 +232,7 @@ const InputComp = ({
   handler,
   col,
   info,
-  dropItems,
-  setDropDownVal,
-  dropDownVal,
+  requiredInput,
 }) => {
   return (
     <div className={`colRow ${col ? "inputCol" : ""}`}>
@@ -207,32 +261,15 @@ const InputComp = ({
       <div className="col-div">
         <div className="flex-div">
           <p>$</p>
-
           <input
             type="number"
             id={label}
             name={name}
             value={value}
             onChange={handler}
-            required
+            required={requiredInput}
           />
         </div>
-        {dropItems?.length > 0 && (
-          <select
-            value={dropDownVal}
-            onChange={(e) => {
-              setDropDownVal(e.target.value);
-            }}
-          >
-            {dropItems.map((elem, idx) => {
-              return (
-                <option key={idx + elem} value={elem}>
-                  {elem}
-                </option>
-              );
-            })}
-          </select>
-        )}
       </div>
     </div>
   );
