@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState } from "react";
+import currencyFormat from "./utils/currencyFormat";
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -22,9 +23,9 @@ const App = () => {
     "Capital Expenditure": 0,
     Other: 0,
   });
-  const [acqusitionCost, setAcqusitionCost] = useState("");
-  const [yearlyIncome, setYearlyIncome] = useState("");
-  const [cashReturn, setCashReturn] = useState("");
+  const [acqusitionCost, setAcqusitionCost] = useState(0);
+  const [yearlyIncome, setYearlyIncome] = useState(0);
+  const [cashReturn, setCashReturn] = useState(0);
   const [dropDown, setDropDown] = useState(false);
 
   const inputHandler = (e) => {
@@ -73,7 +74,7 @@ const App = () => {
     setAcqusitionCost(parseFloat(accCost).toFixed(2));
     setYearlyIncome(parseFloat(yearlyIncomeVal).toFixed(2));
     setCashReturn(
-      parseFloat((yearlyIncomeVal + optionDeposit) / accCost).toFixed(2)
+      parseFloat(((yearlyIncomeVal + optionDeposit) / accCost) * 100).toFixed(2)
     );
   };
 
@@ -205,6 +206,7 @@ const App = () => {
               col
               info="With the rent to own model, you receive a non refundable option deposit typically 5-10 percent of the purchase price. Insert that amount into the following box to see what your cash on cash return would be using the rent to own strategy."
               label="Non Refundable Option Deposit"
+              gold
             />
             <button type="submit" className="calculate">
               Calculate
@@ -225,9 +227,9 @@ const App = () => {
             </h3>
           </div>
           <div className="result-grid results">
-            <p>${acqusitionCost}</p>
-            <p>${yearlyIncome}</p>
-            <p>${cashReturn}</p>
+            <p>{currencyFormat(acqusitionCost)}</p>
+            <p>{currencyFormat(yearlyIncome)}</p>
+            <p>{cashReturn}%</p>
           </div>
         </div>
       </div>
@@ -245,6 +247,7 @@ const InputComp = ({
   col,
   info,
   requiredInput,
+  gold,
 }) => {
   return (
     <div className={`colRow ${col ? "inputCol" : ""}`}>
@@ -274,6 +277,7 @@ const InputComp = ({
         <div className="flex-div">
           <p>$</p>
           <input
+            style={{ backgroundColor: gold ? "#F1E5AC" : "white" }}
             type="number"
             id={label}
             name={name}
