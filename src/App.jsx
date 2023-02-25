@@ -1,6 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import currencyFormat from "./utils/currencyFormat";
+import CurrencyInput from "react-currency-input-field";
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -28,14 +29,20 @@ const App = () => {
   const [cashReturn, setCashReturn] = useState(0);
   const [dropDown, setDropDown] = useState(false);
 
-  const inputHandler = (e) => {
-    const { name, value } = e.target;
+  const inputHandler = (value, name) => {
+    if (isNaN(value))
+      return setFormData((prev) => {
+        return { ...prev, [name]: 0 };
+      });
     setFormData((prev) => {
       return { ...prev, [name]: parseFloat(value) };
     });
   };
-  const inputHandlerExpense = (e) => {
-    const { name, value } = e.target;
+  const inputHandlerExpense = (value, name) => {
+    if (isNaN(value))
+      return setMonthlyExpense((prev) => {
+        return { ...prev, [name]: 0 };
+      });
     setMonthlyExpense((prev) => {
       return { ...prev, [name]: parseFloat(value) };
     });
@@ -151,14 +158,16 @@ const App = () => {
                 onClick={() => setDropDown((prev) => !prev)}
               >
                 <h3>
-                  Total Monthly Expenses = $
-                  {monthlyExpense["Capital Expenditure"] +
-                    monthlyExpense.HOA +
-                    monthlyExpense.Insurance +
-                    monthlyExpense.Other +
-                    monthlyExpense.PITI +
-                    monthlyExpense["Property Management"] +
-                    monthlyExpense.Taxes}{" "}
+                  Total Monthly Expenses ={" "}
+                  {currencyFormat(
+                    monthlyExpense["Capital Expenditure"] +
+                      monthlyExpense.HOA +
+                      monthlyExpense.Insurance +
+                      monthlyExpense.Other +
+                      monthlyExpense.PITI +
+                      monthlyExpense["Property Management"] +
+                      monthlyExpense.Taxes
+                  )}{" "}
                 </h3>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -276,7 +285,15 @@ const InputComp = ({
       <div className="col-div">
         <div className="flex-div">
           <p>$</p>
-          <input
+          <CurrencyInput
+            id={label}
+            name={name}
+            value={value}
+            defaultValue={0}
+            decimalsLimit={2}
+            onValueChange={(value, name) => handler(value, name)}
+          />
+          {/* <input
             style={{ backgroundColor: gold ? "#F1E5AC" : "white" }}
             type="number"
             id={label}
@@ -284,7 +301,7 @@ const InputComp = ({
             value={value}
             onChange={handler}
             required={requiredInput}
-          />
+          /> */}
         </div>
       </div>
     </div>
