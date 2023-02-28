@@ -7,10 +7,8 @@ const App = () => {
   const [formData, setFormData] = useState({
     cashToSeller: "",
     backPayments: "",
-    marketing: "",
     closingCost: "",
     renovations: "",
-    holdingCost: "",
     dispo: "",
     marketRent: "",
     optionDeposit: "",
@@ -24,10 +22,30 @@ const App = () => {
     "Capital Expenditure": 0,
     Other: 0,
   });
+  const [marketingExpense, setMarketingExpense] = useState({
+    "Va lists/ Skip trace": 0,
+    "Text blast": 0,
+    Referral: 0,
+    Realtor: 0,
+    Commission: 0,
+    Acquisition: 0,
+    "Sponsored Ads": 0,
+    Mailings: 0,
+    Other: 0,
+  });
+  const [holdingExpense, setHoldingExpense] = useState({
+    Maintenance: 0,
+    Utilities: 0,
+    Insurance: 0,
+    Other: 0,
+    "Monthly Payments": 0,
+  });
   const [acqusitionCost, setAcqusitionCost] = useState(0);
   const [yearlyIncome, setYearlyIncome] = useState(0);
   const [cashReturn, setCashReturn] = useState(0);
   const [dropDown, setDropDown] = useState(false);
+  const [dropDownMarket, setDropDownMarket] = useState(false);
+  const [dropDownHolding, setDropDownHolding] = useState(false);
 
   const inputHandler = (value, name) => {
     if (isNaN(value))
@@ -47,6 +65,24 @@ const App = () => {
       return { ...prev, [name]: parseFloat(value) };
     });
   };
+  const inputHandlerMarketing = (value, name) => {
+    if (isNaN(value))
+      return setMarketingExpense((prev) => {
+        return { ...prev, [name]: 0 };
+      });
+    setMarketingExpense((prev) => {
+      return { ...prev, [name]: parseFloat(value) };
+    });
+  };
+  const inputHandlerHolding = (value, name) => {
+    if (isNaN(value))
+      return setHoldingExpense((prev) => {
+        return { ...prev, [name]: 0 };
+      });
+    setHoldingExpense((prev) => {
+      return { ...prev, [name]: parseFloat(value) };
+    });
+  };
 
   const calculateValues = (e) => {
     e.preventDefault();
@@ -54,10 +90,8 @@ const App = () => {
       cashToSeller,
       backPayments,
       marketRent,
-      marketing,
       closingCost,
       renovations,
-      holdingCost,
       dispo,
       optionDeposit,
     } = formData;
@@ -69,13 +103,29 @@ const App = () => {
       monthlyExpense.PITI +
       monthlyExpense["Property Management"] +
       monthlyExpense.Taxes;
+    const totalMarketing =
+      marketingExpense["Va lists/ Skip trace"] +
+      marketingExpense["Text blast"] +
+      marketingExpense.Referral +
+      marketingExpense.Realtor +
+      marketingExpense.Commission +
+      marketingExpense.Acquisition +
+      marketingExpense["Sponsored Ads"] +
+      marketingExpense.Mailings +
+      marketingExpense.Other;
+    const totalHolding =
+      holdingExpense["Monthly Payments"] +
+      holdingExpense.Other +
+      holdingExpense.Insurance +
+      holdingExpense.Maintenance +
+      holdingExpense.Utilities;
     const accCost =
       cashToSeller +
       backPayments +
-      marketing +
+      totalMarketing +
       closingCost +
       renovations +
-      holdingCost +
+      totalHolding +
       dispo;
     const yearlyIncomeVal = marketRent * 12 - totalMonthly * 12;
     setAcqusitionCost(parseFloat(accCost).toFixed(2));
@@ -105,14 +155,77 @@ const App = () => {
               label="Back Payments/Liens"
               requiredInput
             />
-            <InputComp
-              handler={inputHandler}
-              value={formData.marketing}
-              name="marketing"
-              info="va lists/ Skip trace, text blast, referral, realtor, commission, acquisition commissions, sponsored ads,mailings"
-              label="Cost of Marketing"
-              requiredInput
-            />
+            <div
+              className="accordian-div"
+              style={{
+                width: "100%",
+                alignItems: "flex-start",
+              }}
+            >
+              <button
+                type="button"
+                style={{ textAlign: "left", justifyContent: "flex-start" }}
+                onClick={() => setDropDownMarket((prev) => !prev)}
+              >
+                <h3>
+                  Cost of Marketing ={" "}
+                  {currencyFormat(
+                    marketingExpense["Va lists/ Skip trace"] +
+                      marketingExpense["Text blast"] +
+                      marketingExpense.Referral +
+                      marketingExpense.Realtor +
+                      marketingExpense.Commission +
+                      marketingExpense.Acquisition +
+                      marketingExpense["Sponsored Ads"] +
+                      marketingExpense.Mailings +
+                      marketingExpense.Other
+                  )}{" "}
+                </h3>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  style={{
+                    transform: dropDownMarket ? "rotate(180deg)" : "rotate(0)",
+                  }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </button>
+              <div
+                style={{ width: "100%" }}
+                className={`acord-bottom ${dropDownMarket ? "open-acord" : ""}`}
+              >
+                {[
+                  "Va lists/ Skip trace",
+                  "Text blast",
+                  "Referral",
+                  "Realtor",
+                  "Commission",
+                  "Acquisition",
+                  "Sponsored Ads",
+                  "Mailings",
+                  "Other",
+                ].map((elem) => {
+                  return (
+                    <InputComp
+                      key={elem}
+                      handler={inputHandlerMarketing}
+                      value={marketingExpense[elem]}
+                      name={elem}
+                      label={elem}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
             <InputComp
               handler={inputHandler}
               value={formData.closingCost}
@@ -127,14 +240,70 @@ const App = () => {
               requiredInput
               label="Renovations"
             />
-            <InputComp
-              handler={inputHandler}
-              value={formData.holdingCost}
-              name="holdingCost"
-              label="Holding Cost"
-              requiredInput
-              info="lawn/snow/maintainance, monthly payment, utilities, insurance"
-            />
+            <div
+              className="accordian-div"
+              style={{
+                width: "100%",
+                alignItems: "flex-start",
+              }}
+            >
+              <button
+                type="button"
+                style={{ textAlign: "left", justifyContent: "flex-start" }}
+                onClick={() => setDropDownHolding((prev) => !prev)}
+              >
+                <h3>
+                  Holding Cost ={" "}
+                  {currencyFormat(
+                    holdingExpense["Monthly Payments"] +
+                      holdingExpense.Other +
+                      holdingExpense.Insurance +
+                      holdingExpense.Maintenance +
+                      holdingExpense.Utilities
+                  )}{" "}
+                </h3>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  style={{
+                    transform: dropDownHolding ? "rotate(180deg)" : "rotate(0)",
+                  }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </button>
+              <div
+                style={{ width: "100%" }}
+                className={`acord-bottom ${
+                  dropDownHolding ? "open-acord" : ""
+                }`}
+              >
+                {[
+                  "Monthly Payments",
+                  "Maintenance",
+                  "Utilities",
+                  "Insurance",
+                  "Other",
+                ].map((elem) => {
+                  return (
+                    <InputComp
+                      key={elem}
+                      handler={inputHandlerHolding}
+                      value={holdingExpense[elem]}
+                      name={elem}
+                      label={elem}
+                    />
+                  );
+                })}
+              </div>
+            </div>
             <InputComp
               handler={inputHandler}
               value={formData.dispo}
@@ -150,7 +319,7 @@ const App = () => {
               name="marketRent"
               col
               requiredInput
-              label="Marketing Rent"
+              label="Market Rent"
             />
             <div className="accordian-div">
               <button
@@ -214,9 +383,11 @@ const App = () => {
               name="optionDeposit"
               col
               info="With the rent to own model, you receive a non refundable option deposit typically 5-10 percent of the purchase price. Insert that amount into the following box to see what your cash on cash return would be using the rent to own strategy."
-              label="Non Refundable Option Deposit"
+              label="Option Deposit"
               gold
+              sub="Supercharge your ROI with the Rent To Own model!"
             />
+
             <button type="submit" className="calculate">
               Calculate
             </button>
@@ -248,20 +419,11 @@ const App = () => {
 
 export default App;
 
-const InputComp = ({
-  label,
-  name,
-  value,
-  handler,
-  col,
-  info,
-  requiredInput,
-  gold,
-}) => {
+const InputComp = ({ label, name, value, handler, col, info, sub, gold }) => {
   return (
     <div className={`colRow ${col ? "inputCol" : ""}`}>
       <label htmlFor={label}>
-        {label}{" "}
+        {label}
         {info && (
           <>
             <svg
@@ -282,10 +444,12 @@ const InputComp = ({
           </>
         )}
       </label>
+      {sub && <h6>{sub}</h6>}
       <div className="col-div">
         <div className="flex-div">
           <p>$</p>
           <CurrencyInput
+            style={{ backgroundColor: gold ? "#F1E5AC" : "white" }}
             id={label}
             name={name}
             value={value}
@@ -293,15 +457,6 @@ const InputComp = ({
             decimalsLimit={2}
             onValueChange={(value, name) => handler(value, name)}
           />
-          {/* <input
-            style={{ backgroundColor: gold ? "#F1E5AC" : "white" }}
-            type="number"
-            id={label}
-            name={name}
-            value={value}
-            onChange={handler}
-            required={requiredInput}
-          /> */}
         </div>
       </div>
     </div>
