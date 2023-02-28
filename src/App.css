@@ -170,12 +170,21 @@
   max-height: 2000px;
   margin-top: 20px;
 }
+.top-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+}
 .colRow h6 {
-  margin: -5px 0px;
   font-size: 13px;
   font-weight: 300;
 }
 @media screen and (max-width: 665px) {
+  .top-label {
+    align-items: flex-start;
+  }
   .colRow label {
     font-size: 16px;
     text-align: left;
