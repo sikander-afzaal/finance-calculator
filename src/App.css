@@ -184,6 +184,7 @@
 .colRow h6 {
   font-size: 13px;
   font-weight: 300;
+  text-align: center;
 }
 @media screen and (max-width: 665px) {
   .top-label {
@@ -191,6 +192,9 @@
   }
   .colRow label {
     font-size: 16px;
+    text-align: left;
+  }
+  .colRow h6 {
     text-align: left;
   }
   .app h1 {
