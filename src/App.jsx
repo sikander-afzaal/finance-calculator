@@ -26,9 +26,8 @@ const App = () => {
     "Va lists/ Skip trace": 0,
     "Text blast": 0,
     Referral: 0,
-    Realtor: 0,
-    Commission: 0,
-    Acquisition: 0,
+    "Realtor Commission": 0,
+    "Acquisitionist Commission": 0,
     "Sponsored Ads": 0,
     Mailings: 0,
     Other: 0,
@@ -107,9 +106,8 @@ const App = () => {
       marketingExpense["Va lists/ Skip trace"] +
       marketingExpense["Text blast"] +
       marketingExpense.Referral +
-      marketingExpense.Realtor +
-      marketingExpense.Commission +
-      marketingExpense.Acquisition +
+      marketingExpense["Realtor Commission"] +
+      marketingExpense["Acquisitionist Commission"] +
       marketingExpense["Sponsored Ads"] +
       marketingExpense.Mailings +
       marketingExpense.Other;
@@ -173,9 +171,8 @@ const App = () => {
                     marketingExpense["Va lists/ Skip trace"] +
                       marketingExpense["Text blast"] +
                       marketingExpense.Referral +
-                      marketingExpense.Realtor +
-                      marketingExpense.Commission +
-                      marketingExpense.Acquisition +
+                      marketingExpense["Realtor Commission"] +
+                      marketingExpense["Acquisitionist Commission"] +
                       marketingExpense["Sponsored Ads"] +
                       marketingExpense.Mailings +
                       marketingExpense.Other
@@ -206,9 +203,8 @@ const App = () => {
                   "Va lists/ Skip trace",
                   "Text blast",
                   "Referral",
-                  "Realtor",
-                  "Commission",
-                  "Acquisition",
+                  "Realtor Commission",
+                  "Acquisitionist Commission",
                   "Sponsored Ads",
                   "Mailings",
                   "Other",
@@ -394,21 +390,23 @@ const App = () => {
           </div>
         </form>
         <div className="result-div">
-          <div className="result-grid">
+          <div className="result-col">
             <h3>
               Total Cost of <br /> Acqusition
             </h3>
+            <p>{currencyFormat(acqusitionCost)}</p>
+          </div>
+          <div className="result-col">
             <h3>
               Yearly
               <br /> Income
             </h3>
+            <p>{currencyFormat(yearlyIncome)}</p>
+          </div>
+          <div className="result-col">
             <h3>
               Cash on Cash <br /> Return
             </h3>
-          </div>
-          <div className="result-grid results">
-            <p>{currencyFormat(acqusitionCost)}</p>
-            <p>{currencyFormat(yearlyIncome)}</p>
             <p>{cashReturn}%</p>
           </div>
         </div>

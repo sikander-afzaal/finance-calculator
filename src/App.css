@@ -49,13 +49,13 @@
 }
 .colRow label {
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
+  text-align: left;
   justify-content: flex-start;
   align-items: center;
   gap: 5px;
   position: relative;
-  text-align: center;
 }
 .flex-div {
   display: flex;
@@ -93,22 +93,26 @@
 .result-div {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
-  gap: 10px;
   margin-top: 20px;
 }
-.result-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+.result-col {
   width: 100%;
-  padding-inline: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 20px;
 }
-.results {
-  background-color: white;
-  height: 50px;
+.result-col p {
+  width: 100%;
+  padding-left: 10px;
+  display: flex;
+  justify-content: flex-start;
   align-items: center;
+  height: 50px;
+  background-color: white;
 }
 .info-ico {
   width: 20px;
@@ -193,8 +197,31 @@
     font-size: 20px;
     text-align: center;
   }
-  .result-grid h3 {
-    font-size: 16px;
+  .result-div {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .result-col {
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+  }
+  .result-col h3 br {
+    display: none;
+  }
+  .result-col h3 {
+    font-size: 17px;
+    font-weight: 500;
+    display: inline-block;
+    width: max-content;
+  }
+  .result-col p {
+    font-size: 18px;
+    width: max-content;
+    min-width: 60px;
+    padding-inline: 0;
+    background-color: transparent;
+    font-weight: bold;
   }
   .info-text {
     left: 100%;
