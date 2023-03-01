@@ -22,6 +22,7 @@ const App = () => {
     "Property Management": 0,
     "Capital Expenditure": 0,
     Other: 0,
+    finalResult: 0,
   });
   const [marketingExpense, setMarketingExpense] = useState({
     marketing: 0,
@@ -33,6 +34,7 @@ const App = () => {
     "Sponsored Ads": 0,
     Mailings: 0,
     Other: 0,
+    finalResult: 0,
   });
   const [holdingExpense, setHoldingExpense] = useState({
     holding: 0,
@@ -40,6 +42,7 @@ const App = () => {
     Utilities: 0,
     Insurance: 0,
     Other: 0,
+    finalResult: 0,
     "Monthly Payments": 0,
   });
   const [acqusitionCost, setAcqusitionCost] = useState(0);
@@ -59,30 +62,81 @@ const App = () => {
     });
   };
   const inputHandlerExpense = (value, name) => {
-    if (isNaN(value))
-      return setMonthlyExpense((prev) => {
-        return { ...prev, [name]: 0 };
-      });
     setMonthlyExpense((prev) => {
-      return { ...prev, [name]: parseFloat(value) };
+      if (isNaN(value)) value = 0;
+      if (name === "monthly")
+        return {
+          ...prev,
+          finalResult: parseFloat(value),
+          monthly: parseFloat(value),
+        };
+      let result = parseFloat(value);
+      for (const property in prev) {
+        if (property === name) {
+          result = result;
+        } else if (property === "finalResult") {
+          result = result;
+        } else {
+          result += parseFloat(prev[property]);
+        }
+      }
+      return {
+        ...prev,
+        [name]: parseFloat(value),
+        finalResult: parseFloat(result),
+      };
     });
   };
   const inputHandlerMarketing = (value, name) => {
-    if (isNaN(value))
-      return setMarketingExpense((prev) => {
-        return { ...prev, [name]: 0 };
-      });
     setMarketingExpense((prev) => {
-      return { ...prev, [name]: parseFloat(value) };
+      if (isNaN(value)) value = 0;
+      if (name === "marketing")
+        return {
+          ...prev,
+          finalResult: parseFloat(value),
+          marketing: parseFloat(value),
+        };
+      let result = parseFloat(value);
+      for (const property in prev) {
+        if (property === name) {
+          result = result;
+        } else if (property === "finalResult") {
+          result = result;
+        } else {
+          result += parseFloat(prev[property]);
+        }
+      }
+      return {
+        ...prev,
+        [name]: parseFloat(value),
+        finalResult: parseFloat(result),
+      };
     });
   };
   const inputHandlerHolding = (value, name) => {
-    if (isNaN(value))
-      return setHoldingExpense((prev) => {
-        return { ...prev, [name]: 0 };
-      });
     setHoldingExpense((prev) => {
-      return { ...prev, [name]: parseFloat(value) };
+      if (isNaN(value)) value = 0;
+      if (name === "holding")
+        return {
+          ...prev,
+          finalResult: parseFloat(value),
+          holding: parseFloat(value),
+        };
+      let result = parseFloat(value);
+      for (const property in prev) {
+        if (property === name) {
+          result = result;
+        } else if (property === "finalResult") {
+          result = result;
+        } else {
+          result += parseFloat(prev[property]);
+        }
+      }
+      return {
+        ...prev,
+        [name]: parseFloat(value),
+        finalResult: parseFloat(result),
+      };
     });
   };
 
@@ -97,32 +151,9 @@ const App = () => {
       dispo,
       optionDeposit,
     } = formData;
-    const totalMonthly =
-      monthlyExpense.monthly +
-      monthlyExpense["Capital Expenditure"] +
-      monthlyExpense.HOA +
-      monthlyExpense.Insurance +
-      monthlyExpense.Other +
-      monthlyExpense.PITI +
-      monthlyExpense["Property Management"] +
-      monthlyExpense.Taxes;
-    const totalMarketing =
-      marketingExpense.marketing +
-      marketingExpense["Va lists/ Skip trace"] +
-      marketingExpense["Text blast"] +
-      marketingExpense.Referral +
-      marketingExpense["Realtor Commission"] +
-      marketingExpense["Acquisitionist Commission"] +
-      marketingExpense["Sponsored Ads"] +
-      marketingExpense.Mailings +
-      marketingExpense.Other;
-    const totalHolding =
-      holdingExpense.holding +
-      holdingExpense["Monthly Payments"] +
-      holdingExpense.Other +
-      holdingExpense.Insurance +
-      holdingExpense.Maintenance +
-      holdingExpense.Utilities;
+    const totalMonthly = monthlyExpense.finalResult;
+    const totalMarketing = marketingExpense.finalResult;
+    const totalHolding = holdingExpense.finalResult;
     const accCost =
       cashToSeller +
       backPayments +
@@ -134,9 +165,61 @@ const App = () => {
     const yearlyIncomeVal = marketRent * 12 - totalMonthly * 12;
     setAcqusitionCost(parseFloat(accCost).toFixed(2));
     setYearlyIncome(parseFloat(yearlyIncomeVal).toFixed(2));
-    setCashReturn(
-      parseFloat((yearlyIncomeVal / (accCost - optionDeposit)) * 100).toFixed(2)
-    );
+    setCashReturn(() => {
+      const answer = parseFloat(
+        (yearlyIncomeVal / (accCost - optionDeposit)) * 100
+      ).toFixed(2);
+      if (answer < 0) {
+        return "Infinite";
+      } else return answer;
+    });
+  };
+
+  const resetValues = () => {
+    setFormData({
+      cashToSeller: "",
+      backPayments: "",
+      closingCost: "",
+      renovations: "",
+      dispo: "",
+      marketRent: "",
+      optionDeposit: "",
+    });
+    setMonthlyExpense({
+      monthly: 0,
+      PITI: 0,
+      Taxes: 0,
+      Insurance: 0,
+      HOA: 0,
+      "Property Management": 0,
+      "Capital Expenditure": 0,
+      Other: 0,
+      finalResult: 0,
+    });
+    setMarketingExpense({
+      marketing: 0,
+      "Va lists/ Skip trace": 0,
+      "Text blast": 0,
+      Referral: 0,
+      "Realtor Commission": 0,
+      "Acquisitionist Commission": 0,
+      "Sponsored Ads": 0,
+      Mailings: 0,
+      Other: 0,
+      finalResult: 0,
+    });
+    setHoldingExpense({
+      holding: 0,
+      Maintenance: 0,
+      Utilities: 0,
+      Insurance: 0,
+      Other: 0,
+      "Monthly Payments": 0,
+      finalResult: 0,
+    });
+    setAcqusitionCost(0);
+    setCashReturn(0);
+    setYearlyIncome(0);
   };
 
   return (
@@ -172,20 +255,7 @@ const App = () => {
                   style={{ textAlign: "left", justifyContent: "flex-start" }}
                   onClick={() => setDropDownMarket((prev) => !prev)}
                 >
-                  <h3>
-                    Cost of Marketing <br className="phone-br" /> ={" "}
-                    {currencyFormat(
-                      marketingExpense["Va lists/ Skip trace"] +
-                        marketingExpense.marketing +
-                        marketingExpense["Text blast"] +
-                        marketingExpense.Referral +
-                        marketingExpense["Realtor Commission"] +
-                        marketingExpense["Acquisitionist Commission"] +
-                        marketingExpense["Sponsored Ads"] +
-                        marketingExpense.Mailings +
-                        marketingExpense.Other
-                    )}{" "}
-                  </h3>
+                  <h3>Cost of Marketing</h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -208,16 +278,12 @@ const App = () => {
                 <div className="accord-top-input">
                   <p>$</p>
                   <CurrencyInput
-                    value={marketingExpense.marketing}
+                    value={marketingExpense.finalResult}
                     defaultValue={0}
                     decimalsLimit={2}
-                    onValueChange={(value) =>
-                      setMarketingExpense((prev) => {
-                        if (isNaN(value)) {
-                          value = 0;
-                        }
-                        return { ...prev, marketing: parseFloat(value) };
-                      })
+                    name={"marketing"}
+                    onValueChange={(value, name) =>
+                      inputHandlerMarketing(value, name)
                     }
                   />
                 </div>
@@ -276,17 +342,7 @@ const App = () => {
                   style={{ textAlign: "left", justifyContent: "flex-start" }}
                   onClick={() => setDropDownHolding((prev) => !prev)}
                 >
-                  <h3>
-                    Holding Cost <br className="phone-br" /> ={" "}
-                    {currencyFormat(
-                      holdingExpense["Monthly Payments"] +
-                        holdingExpense.Other +
-                        holdingExpense.holding +
-                        holdingExpense.Insurance +
-                        holdingExpense.Maintenance +
-                        holdingExpense.Utilities
-                    )}{" "}
-                  </h3>
+                  <h3>Holding Cost</h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -310,17 +366,13 @@ const App = () => {
                 <div className="accord-top-input">
                   <p>$</p>
                   <CurrencyInput
-                    value={holdingExpense.holding}
+                    value={holdingExpense.finalResult}
                     defaultValue={0}
                     decimalsLimit={2}
-                    onValueChange={(value) =>
-                      setHoldingExpense((prev) => {
-                        if (isNaN(value)) {
-                          value = 0;
-                        }
-                        return { ...prev, holding: parseFloat(value) };
-                      })
-                    }
+                    name="holding"
+                    onValueChange={(value, name) => {
+                      inputHandlerHolding(value, name);
+                    }}
                   />
                 </div>
               </div>
@@ -363,7 +415,6 @@ const App = () => {
               handler={inputHandler}
               value={formData.marketRent}
               name="marketRent"
-              col
               requiredInput
               label="Market Rent"
             />
@@ -373,19 +424,7 @@ const App = () => {
                   type="button"
                   onClick={() => setDropDown((prev) => !prev)}
                 >
-                  <h3>
-                    Total Monthly Expenses <br className="phone-br" /> ={" "}
-                    {currencyFormat(
-                      monthlyExpense["Capital Expenditure"] +
-                        monthlyExpense.HOA +
-                        monthlyExpense.Insurance +
-                        monthlyExpense.Other +
-                        monthlyExpense.monthly +
-                        monthlyExpense.PITI +
-                        monthlyExpense["Property Management"] +
-                        monthlyExpense.Taxes
-                    )}{" "}
-                  </h3>
+                  <h3>Total Monthly Expenses</h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -406,17 +445,13 @@ const App = () => {
                 <div className="accord-top-input">
                   <p>$</p>
                   <CurrencyInput
-                    value={monthlyExpense.monthly}
+                    value={monthlyExpense.finalResult}
                     defaultValue={0}
                     decimalsLimit={2}
-                    onValueChange={(value) =>
-                      setMonthlyExpense((prev) => {
-                        if (isNaN(value)) {
-                          value = 0;
-                        }
-                        return { ...prev, monthly: parseFloat(value) };
-                      })
-                    }
+                    name={"monthly"}
+                    onValueChange={(value, name) => {
+                      inputHandlerExpense(value, name);
+                    }}
                   />
                 </div>
               </div>
@@ -447,15 +482,24 @@ const App = () => {
               handler={inputHandler}
               value={formData.optionDeposit}
               name="optionDeposit"
-              col
               info="Supercharge your ROI with the Rent To Own model. With the rent to own model, you receive a non refundable option deposit typically 5-10 percent of the purchase price. Insert that amount into the following box to see what your cash on cash return would be using the rent to own strategy."
               label="Supercharge Your Roi"
               gold
             />
 
-            <button type="submit" className="calculate">
-              Calculate
-            </button>
+            <div className="btn-div">
+              <button type="submit" className="calculate">
+                Calculate
+              </button>
+              <button
+                style={{ background: "green" }}
+                type="submit"
+                onClick={resetValues}
+                className="calculate"
+              >
+                Reset
+              </button>
+            </div>
           </div>
         </form>
         <div className="result-div">
@@ -476,7 +520,13 @@ const App = () => {
             <h3>
               Cash on Cash <br /> Return
             </h3>
-            <p>{cashReturn}%</p>
+            <p>
+              {cashReturn === "Infinite"
+                ? cashReturn
+                : isNaN(cashReturn)
+                ? "%"
+                : cashReturn + "%"}
+            </p>
           </div>
         </div>
       </div>
@@ -486,9 +536,9 @@ const App = () => {
 
 export default App;
 
-const InputComp = ({ label, name, value, handler, col, info, gold }) => {
+const InputComp = ({ label, name, value, handler, info, gold }) => {
   return (
-    <div className={`colRow ${col ? "inputCol" : ""}`}>
+    <div className={`colRow `}>
       <div className="top-label">
         {" "}
         <label htmlFor={label}>
