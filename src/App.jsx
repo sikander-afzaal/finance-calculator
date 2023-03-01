@@ -173,7 +173,7 @@ const App = () => {
                   onClick={() => setDropDownMarket((prev) => !prev)}
                 >
                   <h3>
-                    Cost of Marketing ={" "}
+                    Cost of Marketing <br className="phone-br" /> ={" "}
                     {currencyFormat(
                       marketingExpense["Va lists/ Skip trace"] +
                         marketingExpense.marketing +
@@ -277,7 +277,7 @@ const App = () => {
                   onClick={() => setDropDownHolding((prev) => !prev)}
                 >
                   <h3>
-                    Holding Cost ={" "}
+                    Holding Cost <br className="phone-br" /> ={" "}
                     {currencyFormat(
                       holdingExpense["Monthly Payments"] +
                         holdingExpense.Other +
@@ -374,7 +374,7 @@ const App = () => {
                   onClick={() => setDropDown((prev) => !prev)}
                 >
                   <h3>
-                    Total Monthly Expenses ={" "}
+                    Total Monthly Expenses <br className="phone-br" /> ={" "}
                     {currencyFormat(
                       monthlyExpense["Capital Expenditure"] +
                         monthlyExpense.HOA +

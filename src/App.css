@@ -217,7 +217,14 @@
   background-color: white;
   border: none;
 }
-@media screen and (max-width: 665px) {
+.phone-br {
+  display: none;
+}
+@media screen and (max-width: 750px) {
+  .accord-flex button h3 {
+    text-align: left;
+  }
+
   .top-label {
     align-items: flex-start;
   }
@@ -245,18 +252,19 @@
     display: none;
   }
   .result-col h3 {
-    font-size: 17px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: bold;
     display: inline-block;
     width: max-content;
   }
   .result-col p {
-    font-size: 18px;
+    font-size: 14px;
     width: max-content;
     min-width: 60px;
-    padding-inline: 0;
-    background-color: transparent;
-    font-weight: bold;
+    padding-inline: 10px;
+    min-width: 100px;
+
+    font-weight: normal;
   }
   .info-text {
     left: 100%;
@@ -291,10 +299,14 @@
     align-items: flex-start;
   }
   .accordian-div button {
-    width: 100%;
     justify-content: space-between;
   }
   .acord-bottom {
     width: 100%;
+  }
+}
+@media screen and (max-width: 400px) {
+  .phone-br {
+    display: block;
   }
 }
