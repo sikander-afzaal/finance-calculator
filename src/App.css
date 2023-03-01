@@ -32,6 +32,7 @@
   align-items: flex-start;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 .colRow {
   display: flex;
@@ -156,9 +157,15 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  width: max-content;
+}
+.accordian-div button h3 {
+  font-weight: 700;
+  font-size: 16px;
+  font-family: "Times New Roman", Times, serif;
 }
 .accordian-div svg {
-  width: 22px;
+  width: 16px;
   transition: all 0.5s ease-in-out;
 }
 .acord-bottom {
@@ -167,6 +174,7 @@
   align-items: flex-start;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
   max-height: 0px;
   transition: all 0.5s ease-in-out;
 }
@@ -185,6 +193,29 @@
   font-size: 13px;
   font-weight: 300;
   text-align: center;
+}
+.accord-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+.accord-top-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.accord-top-input p {
+  font-size: 14px;
+}
+.accord-flex input {
+  width: 65px;
+  height: 35px;
+  padding-inline: 5px;
+  background-color: white;
+  border: none;
 }
 @media screen and (max-width: 665px) {
   .top-label {

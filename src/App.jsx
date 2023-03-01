@@ -14,6 +14,7 @@ const App = () => {
     optionDeposit: "",
   });
   const [monthlyExpense, setMonthlyExpense] = useState({
+    monthly: 0,
     PITI: 0,
     Taxes: 0,
     Insurance: 0,
@@ -23,6 +24,7 @@ const App = () => {
     Other: 0,
   });
   const [marketingExpense, setMarketingExpense] = useState({
+    marketing: 0,
     "Va lists/ Skip trace": 0,
     "Text blast": 0,
     Referral: 0,
@@ -33,6 +35,7 @@ const App = () => {
     Other: 0,
   });
   const [holdingExpense, setHoldingExpense] = useState({
+    holding: 0,
     Maintenance: 0,
     Utilities: 0,
     Insurance: 0,
@@ -95,6 +98,7 @@ const App = () => {
       optionDeposit,
     } = formData;
     const totalMonthly =
+      monthlyExpense.monthly +
       monthlyExpense["Capital Expenditure"] +
       monthlyExpense.HOA +
       monthlyExpense.Insurance +
@@ -103,6 +107,7 @@ const App = () => {
       monthlyExpense["Property Management"] +
       monthlyExpense.Taxes;
     const totalMarketing =
+      marketingExpense.marketing +
       marketingExpense["Va lists/ Skip trace"] +
       marketingExpense["Text blast"] +
       marketingExpense.Referral +
@@ -112,6 +117,7 @@ const App = () => {
       marketingExpense.Mailings +
       marketingExpense.Other;
     const totalHolding =
+      holdingExpense.holding +
       holdingExpense["Monthly Payments"] +
       holdingExpense.Other +
       holdingExpense.Insurance +
@@ -129,7 +135,7 @@ const App = () => {
     setAcqusitionCost(parseFloat(accCost).toFixed(2));
     setYearlyIncome(parseFloat(yearlyIncomeVal).toFixed(2));
     setCashReturn(
-      parseFloat(((yearlyIncomeVal + optionDeposit) / accCost) * 100).toFixed(2)
+      parseFloat((yearlyIncomeVal / (accCost - optionDeposit)) * 100).toFixed(2)
     );
   };
 
@@ -160,41 +166,62 @@ const App = () => {
                 alignItems: "flex-start",
               }}
             >
-              <button
-                type="button"
-                style={{ textAlign: "left", justifyContent: "flex-start" }}
-                onClick={() => setDropDownMarket((prev) => !prev)}
-              >
-                <h3>
-                  Cost of Marketing ={" "}
-                  {currencyFormat(
-                    marketingExpense["Va lists/ Skip trace"] +
-                      marketingExpense["Text blast"] +
-                      marketingExpense.Referral +
-                      marketingExpense["Realtor Commission"] +
-                      marketingExpense["Acquisitionist Commission"] +
-                      marketingExpense["Sponsored Ads"] +
-                      marketingExpense.Mailings +
-                      marketingExpense.Other
-                  )}{" "}
-                </h3>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  style={{
-                    transform: dropDownMarket ? "rotate(180deg)" : "rotate(0)",
-                  }}
+              <div className="accord-flex">
+                <button
+                  type="button"
+                  style={{ textAlign: "left", justifyContent: "flex-start" }}
+                  onClick={() => setDropDownMarket((prev) => !prev)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  <h3>
+                    Cost of Marketing ={" "}
+                    {currencyFormat(
+                      marketingExpense["Va lists/ Skip trace"] +
+                        marketingExpense.marketing +
+                        marketingExpense["Text blast"] +
+                        marketingExpense.Referral +
+                        marketingExpense["Realtor Commission"] +
+                        marketingExpense["Acquisitionist Commission"] +
+                        marketingExpense["Sponsored Ads"] +
+                        marketingExpense.Mailings +
+                        marketingExpense.Other
+                    )}{" "}
+                  </h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    style={{
+                      transform: dropDownMarket
+                        ? "rotate(180deg)"
+                        : "rotate(0)",
+                    }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </button>
+                <div className="accord-top-input">
+                  <p>$</p>
+                  <CurrencyInput
+                    value={marketingExpense.marketing}
+                    defaultValue={0}
+                    decimalsLimit={2}
+                    onValueChange={(value) =>
+                      setMarketingExpense((prev) => {
+                        if (isNaN(value)) {
+                          value = 0;
+                        }
+                        return { ...prev, marketing: parseFloat(value) };
+                      })
+                    }
                   />
-                </svg>
-              </button>
+                </div>
+              </div>
               <div
                 style={{ width: "100%" }}
                 className={`acord-bottom ${dropDownMarket ? "open-acord" : ""}`}
@@ -243,38 +270,61 @@ const App = () => {
                 alignItems: "flex-start",
               }}
             >
-              <button
-                type="button"
-                style={{ textAlign: "left", justifyContent: "flex-start" }}
-                onClick={() => setDropDownHolding((prev) => !prev)}
-              >
-                <h3>
-                  Holding Cost ={" "}
-                  {currencyFormat(
-                    holdingExpense["Monthly Payments"] +
-                      holdingExpense.Other +
-                      holdingExpense.Insurance +
-                      holdingExpense.Maintenance +
-                      holdingExpense.Utilities
-                  )}{" "}
-                </h3>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  style={{
-                    transform: dropDownHolding ? "rotate(180deg)" : "rotate(0)",
-                  }}
+              <div className="accord-flex">
+                <button
+                  type="button"
+                  style={{ textAlign: "left", justifyContent: "flex-start" }}
+                  onClick={() => setDropDownHolding((prev) => !prev)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  <h3>
+                    Holding Cost ={" "}
+                    {currencyFormat(
+                      holdingExpense["Monthly Payments"] +
+                        holdingExpense.Other +
+                        holdingExpense.holding +
+                        holdingExpense.Insurance +
+                        holdingExpense.Maintenance +
+                        holdingExpense.Utilities
+                    )}{" "}
+                  </h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    style={{
+                      transform: dropDownHolding
+                        ? "rotate(180deg)"
+                        : "rotate(0)",
+                    }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </button>
+
+                <div className="accord-top-input">
+                  <p>$</p>
+                  <CurrencyInput
+                    value={holdingExpense.holding}
+                    defaultValue={0}
+                    decimalsLimit={2}
+                    onValueChange={(value) =>
+                      setHoldingExpense((prev) => {
+                        if (isNaN(value)) {
+                          value = 0;
+                        }
+                        return { ...prev, holding: parseFloat(value) };
+                      })
+                    }
                   />
-                </svg>
-              </button>
+                </div>
+              </div>
+
               <div
                 style={{ width: "100%" }}
                 className={`acord-bottom ${
@@ -318,39 +368,59 @@ const App = () => {
               label="Market Rent"
             />
             <div className="accordian-div">
-              <button
-                type="button"
-                onClick={() => setDropDown((prev) => !prev)}
-              >
-                <h3>
-                  Total Monthly Expenses ={" "}
-                  {currencyFormat(
-                    monthlyExpense["Capital Expenditure"] +
-                      monthlyExpense.HOA +
-                      monthlyExpense.Insurance +
-                      monthlyExpense.Other +
-                      monthlyExpense.PITI +
-                      monthlyExpense["Property Management"] +
-                      monthlyExpense.Taxes
-                  )}{" "}
-                </h3>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  style={{
-                    transform: dropDown ? "rotate(180deg)" : "rotate(0)",
-                  }}
+              <div className="accord-flex">
+                <button
+                  type="button"
+                  onClick={() => setDropDown((prev) => !prev)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  <h3>
+                    Total Monthly Expenses ={" "}
+                    {currencyFormat(
+                      monthlyExpense["Capital Expenditure"] +
+                        monthlyExpense.HOA +
+                        monthlyExpense.Insurance +
+                        monthlyExpense.Other +
+                        monthlyExpense.monthly +
+                        monthlyExpense.PITI +
+                        monthlyExpense["Property Management"] +
+                        monthlyExpense.Taxes
+                    )}{" "}
+                  </h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    style={{
+                      transform: dropDown ? "rotate(180deg)" : "rotate(0)",
+                    }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </button>
+                <div className="accord-top-input">
+                  <p>$</p>
+                  <CurrencyInput
+                    value={monthlyExpense.monthly}
+                    defaultValue={0}
+                    decimalsLimit={2}
+                    onValueChange={(value) =>
+                      setMonthlyExpense((prev) => {
+                        if (isNaN(value)) {
+                          value = 0;
+                        }
+                        return { ...prev, monthly: parseFloat(value) };
+                      })
+                    }
                   />
-                </svg>
-              </button>
+                </div>
+              </div>
+
               <div className={`acord-bottom ${dropDown ? "open-acord" : ""}`}>
                 {[
                   "PITI",
@@ -378,10 +448,9 @@ const App = () => {
               value={formData.optionDeposit}
               name="optionDeposit"
               col
-              info="With the rent to own model, you receive a non refundable option deposit typically 5-10 percent of the purchase price. Insert that amount into the following box to see what your cash on cash return would be using the rent to own strategy."
-              label="Option Deposit"
+              info="Supercharge your ROI with the Rent To Own model. With the rent to own model, you receive a non refundable option deposit typically 5-10 percent of the purchase price. Insert that amount into the following box to see what your cash on cash return would be using the rent to own strategy."
+              label="Supercharge Your Roi"
               gold
-              sub="Supercharge your ROI with the Rent To Own model!"
             />
 
             <button type="submit" className="calculate">
@@ -417,7 +486,7 @@ const App = () => {
 
 export default App;
 
-const InputComp = ({ label, name, value, handler, col, info, sub, gold }) => {
+const InputComp = ({ label, name, value, handler, col, info, gold }) => {
   return (
     <div className={`colRow ${col ? "inputCol" : ""}`}>
       <div className="top-label">
@@ -444,7 +513,7 @@ const InputComp = ({ label, name, value, handler, col, info, sub, gold }) => {
             </>
           )}
         </label>
-        {sub && <h6>{sub}</h6>}
+        {/* {sub && <h6>{sub}</h6>} */}
       </div>
       <div className="col-div">
         <div className="flex-div">
