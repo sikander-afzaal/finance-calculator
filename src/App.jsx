@@ -5,13 +5,13 @@ import CurrencyInput from "react-currency-input-field";
 
 const App = () => {
   const [formData, setFormData] = useState({
-    cashToSeller: "",
-    backPayments: "",
-    closingCost: "",
-    renovations: "",
-    dispo: "",
-    marketRent: "",
-    optionDeposit: "",
+    cashToSeller: 0,
+    backPayments: 0,
+    closingCost: 0,
+    renovations: 0,
+    dispo: 0,
+    marketRent: 0,
+    optionDeposit: 0,
   });
   const [monthlyExpense, setMonthlyExpense] = useState({
     monthly: 0,
@@ -163,13 +163,22 @@ const App = () => {
       totalHolding +
       dispo;
     const yearlyIncomeVal = marketRent * 12 - totalMonthly * 12;
+    console.log(
+      cashToSeller,
+      backPayments,
+      totalMarketing,
+      closingCost,
+      renovations,
+      totalHolding,
+      dispo
+    );
     setAcqusitionCost(parseFloat(accCost).toFixed(2));
     setYearlyIncome(parseFloat(yearlyIncomeVal).toFixed(2));
     setCashReturn(() => {
       const answer = parseFloat(
         (yearlyIncomeVal / (accCost - optionDeposit)) * 100
       ).toFixed(2);
-      if (answer < 0 || optionDeposit > accCost) {
+      if (optionDeposit > accCost) {
       } else return answer;
       return "∞";
     });
