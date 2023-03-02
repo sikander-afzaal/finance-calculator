@@ -169,9 +169,9 @@ const App = () => {
       const answer = parseFloat(
         (yearlyIncomeVal / (accCost - optionDeposit)) * 100
       ).toFixed(2);
-      if (answer < 0) {
-        return "Infinite";
+      if (answer < 0 || optionDeposit > accCost) {
       } else return answer;
+      return "∞";
     });
   };
 
@@ -488,16 +488,15 @@ const App = () => {
             />
 
             <div className="btn-div">
-              <button type="submit" className="calculate">
-                Calculate
+              <button type="submit" onClick={resetValues} className="calculate">
+                Clear
               </button>
               <button
                 style={{ background: "green" }}
                 type="submit"
-                onClick={resetValues}
                 className="calculate"
               >
-                Reset
+                Calculate
               </button>
             </div>
           </div>
@@ -521,7 +520,7 @@ const App = () => {
               Cash on Cash <br /> Return
             </h3>
             <p>
-              {cashReturn === "Infinite"
+              {cashReturn === "∞"
                 ? cashReturn
                 : isNaN(cashReturn)
                 ? "%"
