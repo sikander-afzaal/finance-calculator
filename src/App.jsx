@@ -467,13 +467,13 @@ const App = () => {
 
               <div className={`acord-bottom ${dropDown ? "open-acord" : ""}`}>
                 {[
-                  "PITI",
-                  "Taxes",
-                  "Insurance",
-                  "HOA",
-                  "Capital Expenditure",
-                  "Property Management",
-                  "Other",
+                  "PITI (per month)",
+                  "Taxes (per month)",
+                  "Insurance (per month)",
+                  "HOA (per month)",
+                  "Capital Expenditure (per month)",
+                  "Property Management (per month)",
+                  "Other (per month)",
                 ].map((elem) => {
                   return (
                     <InputComp
