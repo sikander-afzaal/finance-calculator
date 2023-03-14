@@ -186,13 +186,13 @@ const App = () => {
 
   const resetValues = () => {
     setFormData({
-      cashToSeller: "",
-      backPayments: "",
-      closingCost: "",
-      renovations: "",
-      dispo: "",
-      marketRent: "",
-      optionDeposit: "",
+      cashToSeller: 0,
+      backPayments: 0,
+      closingCost: 0,
+      renovations: 0,
+      dispo: 0,
+      marketRent: 0,
+      optionDeposit: 0,
     });
     setMonthlyExpense({
       monthly: 0,
@@ -223,8 +223,8 @@ const App = () => {
       Utilities: 0,
       Insurance: 0,
       Other: 0,
-      "Monthly Payments": 0,
       finalResult: 0,
+      "Monthly Payments": 0,
     });
     setAcqusitionCost(0);
     setCashReturn(0);
