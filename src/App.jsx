@@ -513,7 +513,7 @@ const App = () => {
         <div className="result-div">
           <div className="result-col">
             <h3>
-              Total Cost of <br /> Acqusition
+              Total Cost of <br /> Acquisition
             </h3>
             <p>{currencyFormat(acqusitionCost)}</p>
           </div>
